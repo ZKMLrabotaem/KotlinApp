@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Основная тема приложения -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Цвет фона для всего приложения -->
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:textColorLink">@android:color/white</item>
+    </style>
+
+    <style name="CustomButtonStyle">
+        <item name="android:background">@color/red</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>

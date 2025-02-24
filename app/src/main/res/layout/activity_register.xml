@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center"
+    android:background="@color/black"
+    android:textColor="@color/white"
+    android:textColorHint="@android:color/white">
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/white"
+        android:textColorHint ="@android:color/white"/>
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:textColorHint ="@android:color/white"/>
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Подтверждение пароля"
+        android:inputType="textPassword"
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/white"
+        android:textColorHint ="@android:color/white"/>
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Зарегистрироваться"
+        android:textColorLink="#FF0000"
+        android:visibility="visible"
+        app:backgroundTint="@color/red"
+        tools:visibility="visible"
+        android:textColor="@android:color/white"
+        android:textColorHint ="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/loginTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Уже есть аккаунт? Войти"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@android:color/white"
+        android:textColorHint ="@android:color/white"
+        android:textColorLink="#F86666"/>
+</LinearLayout>
