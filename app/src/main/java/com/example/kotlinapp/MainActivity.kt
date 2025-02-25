@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -37,14 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.discRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val logoutButton = findViewById<Button>(R.id.logoutButton)
-        logoutButton.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
         recyclerView.adapter = DiscAdapter()
+        val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
+        fabBack.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
 
         fetchDiscs()
     }

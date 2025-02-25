@@ -8,12 +8,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
     private val emailPattern = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")
-
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -52,6 +55,8 @@ class RegisterActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        createUserProfile(user)
                         showToast("Регистрация прошла успешно!")
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
@@ -71,5 +76,31 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun createUserProfile(user: FirebaseUser?) {
+        if (user != null) {
+            val userProfile = hashMapOf(
+                "name" to "?",
+                "email" to user.email,
+                "phone" to "?",
+                "avatar" to "?",
+                "gender" to "?",
+                "birthdate" to "?",
+                "country" to "?",
+                "platform" to "?",
+                "description" to "?",
+                "favoriteGenres" to listOf<String>(),
+                "dislikedGenres" to listOf<String>()
+            )
+
+            db.collection("users").document(user.uid)
+                .set(userProfile)
+                .addOnSuccessListener {
+                    println("Профиль пользователя создан")
+                }
+                .addOnFailureListener { e ->
+                    println("Ошибка при создании профиля: $e")
+                }
+        }
     }
 }

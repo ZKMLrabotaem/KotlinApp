@@ -1,0 +1,110 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Имя"
+            android:text="Имя"
+            android:textColor="@color/white"/>
+
+        <Spinner
+            android:id="@+id/genderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:backgroundTint="@color/black" />
+
+        <TextView
+            android:id="@+id/birthdateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Дата рождения"
+            android:text="Дата рождения"
+            android:padding="10dp"
+            android:background="@color/black" />
+
+        <EditText
+            android:text="Страна"
+            android:textColor="@color/white"
+            android:id="@+id/countryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Страна" />
+
+        <EditText
+            android:text="Платформа"
+            android:textColor="@color/white"
+            android:id="@+id/platformEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Платформа" />
+
+        <EditText
+            android:text="Описание"
+            android:textColor="@color/white"
+            android:id="@+id/descriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Описание" />
+
+        <EditText
+            android:text="Любимые жанры"
+            android:textColor="@color/white"
+            android:id="@+id/favoriteGenresEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Любимые жанры (через запятую)" />
+
+        <EditText
+            android:text="Нелюбимые жанры"
+            android:textColor="@color/white"
+            android:id="@+id/dislikedGenresEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Нелюбимые жанры (через запятую)"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            android:textSize="24sp"
+            app:backgroundTint="@color/red"
+            android:layout_marginBottom="12dp"/>
+        <Button
+
+            android:id="@+id/deleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Удалить профиль"
+            android:textSize="24sp"
+            app:backgroundTint="@color/red" />
+    </LinearLayout>
+</ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/previous"
+        app:backgroundTint="@color/red"/>
+</RelativeLayout>

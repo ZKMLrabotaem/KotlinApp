@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.kotlinapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DiscDetailActivity : AppCompatActivity() {
 
@@ -28,5 +29,8 @@ class DiscDetailActivity : AppCompatActivity() {
 
         val imageSlider = findViewById<ViewPager2>(R.id.imageSlider)
         imageSlider.adapter = ImageSliderAdapter(imageUrls)
+        findViewById<FloatingActionButton>(R.id.fabBack).setOnClickListener {
+            finish()
+        }
     }
 }

@@ -25,6 +25,10 @@
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".DiscDetailActivity">
         </activity>
+        <activity android:name=".ProfileActivity">
+        </activity>
+        <activity android:name=".EditProfileActivity">
+        </activity>
     </application>
 
 </manifest>
