@@ -89,7 +89,7 @@ class AddDiscActivity : AppCompatActivity() {
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (s.toString().isNotEmpty() && editTextUrls.size < 5) {
+                if (s.toString().isNotEmpty() && editTextUrls.size < 7) {
                     if (editText == editTextUrls.last()) {
                         addUrlField()
                     }
@@ -143,8 +143,6 @@ class AddDiscActivity : AppCompatActivity() {
                     imagesCollection.document((index + 1).toString()).set(mapOf("url" to url))
                 }
 
-                db.collection("discs").document(discId).collection("rating").document("empty").set(emptyMap<String, Any>())
-                db.collection("discs").document(discId).collection("comments").document("empty").set(emptyMap<String, Any>())
 
                 Toast.makeText(this, "Диск добавлен!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, MainActivity::class.java))

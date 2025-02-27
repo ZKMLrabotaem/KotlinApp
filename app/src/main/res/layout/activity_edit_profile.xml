@@ -14,7 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <EditText
+            android:id="@+id/avatarEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL Аватара"
+            android:text="Аватар"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"

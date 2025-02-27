@@ -52,7 +52,9 @@ class DiscDetailActivity : AppCompatActivity() {
         deleteButton = findViewById(R.id.deleteButton)
         editButton = findViewById(R.id.editButton)
 
-        findViewById<FloatingActionButton>(R.id.fabBack).setOnClickListener {
+        val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
+        fabBack.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
         val addRateButton = findViewById<FloatingActionButton>(R.id.addRate)

@@ -148,9 +148,9 @@ class FavoritesActivity : AppCompatActivity() {
 
         filteredDiscs = favoriteDiscs.filter { disc ->
             (query.isEmpty() || disc.name.lowercase().contains(query)) &&
-                    (selectedGenre == "Все жанры" || disc.genre == selectedGenre)
+                    (selectedGenre == "Все жанры" || disc.genre.contains(selectedGenre))
         }.toMutableList()
-
+        filteredDiscs.sortBy { it.name.lowercase() }
         if (selectedPrice == "Дешевые сверху") {
             filteredDiscs.sortBy { it.price }
         } else if (selectedPrice == "Дорогие сверху") {

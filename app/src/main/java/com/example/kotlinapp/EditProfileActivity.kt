@@ -17,6 +17,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var avatarEditText: EditText
     private lateinit var nameEditText: EditText
     private lateinit var genderSpinner: Spinner
     private lateinit var birthdateTextView: TextView
@@ -39,7 +40,7 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-
+        avatarEditText = findViewById(R.id.avatarEditText)
         nameEditText = findViewById(R.id.nameEditText)
         genderSpinner = findViewById(R.id.genderSpinner)
         birthdateTextView = findViewById(R.id.birthdateTextView)
@@ -85,6 +86,7 @@ class EditProfileActivity : AppCompatActivity() {
             db.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
+                        avatarEditText.setText(document.getString("avatar"))
                         nameEditText.setText(document.getString("name"))
                         val country = document.getString("country") ?: "Не указано"
                         countrySpinner.setSelection(countries.indexOf(country))
@@ -220,6 +222,7 @@ class EditProfileActivity : AppCompatActivity() {
         val user = auth.currentUser ?: return
 
         val updatedProfile = mapOf(
+            "avatar" to avatarEditText.text.toString().trim(),
             "name" to nameEditText.text.toString().trim(),
             "gender" to genderSpinner.selectedItem.toString(),
             "birthdate" to birthdateTextView.text.toString().trim(),
