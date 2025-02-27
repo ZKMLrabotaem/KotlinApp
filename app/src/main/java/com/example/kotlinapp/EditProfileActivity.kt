@@ -20,27 +20,43 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var nameEditText: EditText
     private lateinit var genderSpinner: Spinner
     private lateinit var birthdateTextView: TextView
-    private lateinit var countryEditText: EditText
-    private lateinit var platformEditText: EditText
+    private lateinit var telephoneEditText: EditText
+    private lateinit var countrySpinner: Spinner
+    private lateinit var platformSpinner: Spinner
     private lateinit var descriptionEditText: EditText
     private lateinit var favoriteGenresEditText: EditText
     private lateinit var dislikedGenresEditText: EditText
     private lateinit var saveButton: Button
     private lateinit var deleteButton: Button
+    private val genresList = arrayOf("Экшен", "РПГ", "Шутер", "Хоррор", "Гонки", "Приключения", "Стратегия", "Спортивные", "Файтинг", "Слэшер")
+    private val selectedFavoriteGenres = mutableListOf<String>()
+    private val selectedDislikedGenres = mutableListOf<String>()
+    val countries = Locale.getISOCountries().map { code ->
+        Locale("", code).displayCountry
+    }.sorted().toTypedArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
+
         nameEditText = findViewById(R.id.nameEditText)
         genderSpinner = findViewById(R.id.genderSpinner)
         birthdateTextView = findViewById(R.id.birthdateTextView)
-        countryEditText = findViewById(R.id.countryEditText)
-        platformEditText = findViewById(R.id.platformEditText)
+        telephoneEditText = findViewById(R.id.telephoneEditText)
+        countrySpinner = findViewById(R.id.countrySpinner)
+        platformSpinner = findViewById(R.id.platformSpinner)
         descriptionEditText = findViewById(R.id.descriptionEditText)
         favoriteGenresEditText = findViewById(R.id.favoriteGenresEditText)
         dislikedGenresEditText = findViewById(R.id.dislikedGenresEditText)
         saveButton = findViewById(R.id.saveButton)
+        favoriteGenresEditText.setOnClickListener {
+            showMultiChoiceDialog("Выберите любимые жанры", genresList, selectedFavoriteGenres, favoriteGenresEditText)
+        }
+
+        dislikedGenresEditText.setOnClickListener {
+            showMultiChoiceDialog("Выберите нелюбимые жанры", genresList, selectedDislikedGenres, dislikedGenresEditText)
+        }
         val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
 
         fabBack.setOnClickListener {
@@ -52,25 +68,34 @@ class EditProfileActivity : AppCompatActivity() {
         deleteButton.setOnClickListener {
             confirmDeleteProfile()
         }
-
-        val genderOptions = arrayOf("Мужской", "Женский", "Не указано")
+        val adapter3 = ArrayAdapter(this, R.layout.spinner_item, countries)
+        adapter3.setDropDownViewResource(R.layout.spinner_item)
+        countrySpinner.adapter = adapter3
+        val genderOptions = arrayOf("Не указано","Мужской", "Женский")
         val adapter = ArrayAdapter(this, R.layout.spinner_item, genderOptions)
         adapter.setDropDownViewResource(R.layout.spinner_item)
         genderSpinner.adapter = adapter
 
+        val platformOptions = arrayOf("Не указано","PlayStation", "Xbox", "PC")
+        val adapter2 = ArrayAdapter(this, R.layout.spinner_item, platformOptions)
+        adapter2.setDropDownViewResource(R.layout.spinner_item)
+        platformSpinner.adapter = adapter2
         val user = auth.currentUser
         if (user != null) {
             db.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         nameEditText.setText(document.getString("name"))
-                        countryEditText.setText(document.getString("country"))
-                        platformEditText.setText(document.getString("platform"))
+                        val country = document.getString("country") ?: "Не указано"
+                        countrySpinner.setSelection(countries.indexOf(country))
+                        telephoneEditText.setText(document.getString("phone"))
                         descriptionEditText.setText(document.getString("description"))
                         birthdateTextView.text = document.getString("birthdate")
                         favoriteGenresEditText.setText((document.get("favoriteGenres") as? List<*>)?.joinToString(", "))
                         dislikedGenresEditText.setText((document.get("dislikedGenres") as? List<*>)?.joinToString(", "))
 
+                        val platform = document.getString("platform")
+                        platformSpinner.setSelection(platformOptions.indexOf(platform ?: "Не указано"))
                         val gender = document.getString("gender")
                         genderSpinner.setSelection(genderOptions.indexOf(gender ?: "Не указано"))
                     }
@@ -104,8 +129,8 @@ class EditProfileActivity : AppCompatActivity() {
 
         val input = EditText(this)
         input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-        input.setTextColor(resources.getColor(android.R.color.white, theme)) // Белый текст
-        input.setHintTextColor(resources.getColor(android.R.color.darker_gray, theme)) // Серый hint
+        input.setTextColor(resources.getColor(android.R.color.white, theme))
+        input.setHintTextColor(resources.getColor(android.R.color.darker_gray, theme))
 
         builder.setView(input)
 
@@ -171,6 +196,25 @@ class EditProfileActivity : AppCompatActivity() {
         )
         datePicker.show()
     }
+    private fun showMultiChoiceDialog(title: String, genres: Array<String>, selectedGenres: MutableList<String>, targetEditText: EditText) {
+        val selectedItems = BooleanArray(genres.size) { selectedGenres.contains(genres[it]) }
+
+        val builder = AlertDialog.Builder(this, R.style.DarkAlertDialog)
+        builder.setTitle(title)
+        builder.setMultiChoiceItems(genres, selectedItems) { _, which, isChecked ->
+            if (isChecked) {
+                selectedGenres.add(genres[which])
+            } else {
+                selectedGenres.remove(genres[which])
+            }
+        }
+
+        builder.setPositiveButton("ОК") { _, _ ->
+            targetEditText.setText(selectedGenres.joinToString(", "))
+        }
+        builder.setNegativeButton("Отмена", null)
+        builder.show()
+    }
 
     private fun saveProfileData() {
         val user = auth.currentUser ?: return
@@ -178,12 +222,13 @@ class EditProfileActivity : AppCompatActivity() {
         val updatedProfile = mapOf(
             "name" to nameEditText.text.toString().trim(),
             "gender" to genderSpinner.selectedItem.toString(),
-            "birthdate" to birthdateTextView.text.toString(),
-            "country" to countryEditText.text.toString().trim(),
-            "platform" to platformEditText.text.toString().trim(),
+            "birthdate" to birthdateTextView.text.toString().trim(),
+            "phone" to telephoneEditText.text.toString(),
+            "country" to countrySpinner.selectedItem.toString(),
+            "platform" to platformSpinner.selectedItem.toString(),
             "description" to descriptionEditText.text.toString().trim(),
-            "favoriteGenres" to favoriteGenresEditText.text.toString().split(",").map { it.trim() },
-            "dislikedGenres" to dislikedGenresEditText.text.toString().split(",").map { it.trim() }
+            "favoriteGenres" to selectedFavoriteGenres,
+            "dislikedGenres" to selectedDislikedGenres
         )
 
         db.collection("users").document(user.uid).update(updatedProfile)

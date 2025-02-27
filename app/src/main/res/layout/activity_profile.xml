@@ -2,26 +2,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
-
+    android:orientation="vertical">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="706dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="136dp"
+            android:layout_height="195dp"
             android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/avatarImageView"
-                android:layout_width="119dp"
-                android:layout_height="119dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"/>
+                android:layout_width="127dp"
+                android:layout_height="127dp"
+                android:layout_gravity="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,110 +32,136 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/red"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/nameTextView"
-                        android:layout_width="146dp"
-                        android:layout_height="46dp"
+                        android:layout_width="144dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
                         android:layout_marginBottom="8dp"
+                        android:gravity="center"
                         android:text="Имя"
                         android:textAlignment="center"
                         android:textSize="20sp" />
 
                     <Button
                         android:id="@+id/editButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="37dp"
-                        android:layout_gravity="end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
                         android:text="Ред."
-                        app:backgroundTint="@color/red" />
+                        app:backgroundTint="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="49dp"
                     android:layout_marginBottom="8dp"
                     android:orientation="horizontal">
 
 
                     <TextView
                         android:id="@+id/birthdateTextView"
-                        android:layout_width="169dp"
-                        android:layout_height="wrap_content"
-                        android:text="Дата Рождения" />
+                        android:layout_width="128dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:text="Дата Рождения"
+                        android:textAlignment="textStart" />
+
+                    <TextView
+                        android:id="@+id/phoneTextView"
+                        android:layout_width="138dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:text="Тел."
+                        android:textAlignment="textStart" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/emailTextView"
-                        android:layout_width="124dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/red"
+                        android:paddingLeft="8dp"
                         android:text="Email" />
 
-                    <TextView
-                        android:id="@+id/phoneTextView"
-                        android:layout_width="130dp"
-                        android:layout_height="wrap_content"
-                        android:text="Тел." />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="66dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/genderTextView"
-                        android:layout_width="123dp"
-                        android:layout_height="wrap_content"
-                        android:text="Пол: " />
+                        android:layout_width="110dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:text="Пол: "
+                        android:textAlignment="textStart" />
 
                     <TextView
                         android:id="@+id/countryTextView"
-                        android:layout_width="131dp"
-                        android:layout_height="wrap_content"
-                        android:text="Страна" />
+                        android:layout_width="143dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:text="Страна"
+                        android:textAlignment="textStart" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/platformTextView"
-            android:layout_width="175dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Платформа" />
+            android:background="@color/red"
+            android:text="Платформа"
+            android:paddingLeft="8dp"/>
 
         <TextView
             android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Описание" />
+            android:text="Описание"
+            android:paddingLeft="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/red">
 
             <TextView
                 android:id="@+id/favoriteGenresTextView"
                 android:layout_width="198dp"
                 android:layout_height="wrap_content"
+                android:background="@color/red"
                 android:text="Любимые жанры"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/dislikedGenresTextView"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
+                android:layout_width="172dp"
+                android:layout_height="match_parent"
+                android:background="@color/red"
                 android:text="Нелюбимые жанры"
                 android:textAlignment="center" />
         </LinearLayout>
@@ -155,6 +182,7 @@
             app:backgroundTint="@color/red" />
 
     </LinearLayout>
+    </ScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabBack"
         android:layout_width="wrap_content"

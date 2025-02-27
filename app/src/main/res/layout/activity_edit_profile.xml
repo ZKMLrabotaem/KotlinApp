@@ -21,14 +21,16 @@
             android:layout_height="wrap_content"
             android:hint="Имя"
             android:text="Имя"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Spinner
             android:id="@+id/genderSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/black"
-            android:backgroundTint="@color/black" />
+            android:backgroundTint="@color/black"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/birthdateTextView"
@@ -37,23 +39,39 @@
             android:hint="Дата рождения"
             android:text="Дата рождения"
             android:padding="10dp"
-            android:background="@color/black" />
-
+            android:background="@color/black"
+            android:textSize="20sp" />
         <EditText
+            android:id="@+id/telephoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Телефон"
+            android:text="Телефон"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/countrySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:backgroundTint="@color/black"
+            android:dropDownHeight="300dp"
+            android:hint="Страна"
             android:text="Страна"
+            android:textAlignment="textStart"
             android:textColor="@color/white"
-            android:id="@+id/countryEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Страна" />
+            android:textSize="20sp" />
 
-        <EditText
+        <Spinner
             android:text="Платформа"
-            android:textColor="@color/white"
-            android:id="@+id/platformEditText"
+            android:id="@+id/platformSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Платформа" />
+            android:background="@color/black"
+            android:backgroundTint="@color/black"
+            android:hint="Платформа"
+            android:textSize="20sp"/>
 
         <EditText
             android:text="Описание"
@@ -61,7 +79,8 @@
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Описание" />
+            android:hint="Описание"
+            android:textSize="20sp"/>
 
         <EditText
             android:text="Любимые жанры"
@@ -69,7 +88,8 @@
             android:id="@+id/favoriteGenresEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Любимые жанры (через запятую)" />
+            android:hint="Любимые жанры (через запятую)"
+            android:textSize="20sp"/>
 
         <EditText
             android:text="Нелюбимые жанры"
@@ -78,7 +98,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Нелюбимые жанры (через запятую)"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:textSize="20sp"/>
 
         <Button
             android:id="@+id/saveButton"

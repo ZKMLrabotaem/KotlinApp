@@ -89,6 +89,7 @@ class RegisterActivity : AppCompatActivity() {
                 "country" to "?",
                 "platform" to "?",
                 "description" to "?",
+                "favs" to listOf<String>(),
                 "favoriteGenres" to listOf<String>(),
                 "dislikedGenres" to listOf<String>()
             )

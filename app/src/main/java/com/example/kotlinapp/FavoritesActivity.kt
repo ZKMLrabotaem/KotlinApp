@@ -18,78 +18,44 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MainActivity : AppCompatActivity() {
+class FavoritesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEditText: EditText
     private lateinit var genreSpinner: Spinner
     private lateinit var priceSpinner: Spinner
 
-    private val discs = mutableListOf<GameDisc>()
+    private val favoriteDiscs = mutableListOf<GameDisc>()
     private var filteredDiscs = mutableListOf<GameDisc>()
-    private lateinit var fabAdd: FloatingActionButton
-    private var userRole: String = "user"
+
+    private val db = FirebaseFirestore.getInstance()
+    private val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-            return
-        }
-
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_favorites)
 
         recyclerView = findViewById(R.id.discRecyclerView)
         searchEditText = findViewById(R.id.searchEditText)
         genreSpinner = findViewById(R.id.genreSpinner)
         priceSpinner = findViewById(R.id.priceSpinner)
-        fabAdd = findViewById(R.id.fabAdd)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = DiscAdapter()
 
         val fabBack = findViewById<FloatingActionButton>(R.id.fabBack)
         fabBack.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
         }
 
-        fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddDiscActivity::class.java))
-        }
-
-        fabAdd.visibility = View.GONE
-
-        checkUserRole()
         setupSpinners()
         setupSearch()
-        fetchDiscs()
+        fetchFavoriteDiscs()
     }
-
-    private fun checkUserRole() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users").document(userId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    userRole = document.getString("role") ?: "user"
-                    if (userRole == "admin") {
-                        fabAdd.visibility = View.VISIBLE
-                    }
-                }
-            }
-            .addOnFailureListener {
-                Log.e("MainActivity", "Ошибка получения роли пользователя")
-            }
-    }
-
 
     private fun setupSpinners() {
         val genres = listOf("Все жанры", "Экшен", "РПГ", "Шутер", "Хоррор", "Гонки", "Приключения", "Стратегия", "Спортивные", "Файтинг", "Слэшер")
-        val priceOptions = listOf("Цена", "Дешевые сверху", "Дорогие сверху")
+        val priceOptions = listOf("Цена: все", "Дешевые сверху", "Дорогие сверху")
 
         val genreAdapter = ArrayAdapter(this, R.layout.spinner_item, genres)
         genreAdapter.setDropDownViewResource(R.layout.spinner_item)
@@ -103,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 applyFilters()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -110,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 applyFilters()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
@@ -120,36 +88,56 @@ class MainActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 applyFilters()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
-    private fun fetchDiscs() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("discs").get()
-            .addOnSuccessListener { documents ->
-                discs.clear()
-                for (document in documents) {
-                    val disc = document.toObject(GameDisc::class.java)
-                    val discId = document.id
+    private fun fetchFavoriteDiscs() {
+        if (user == null) return
 
-                    db.collection("discs").document(discId).collection("imageURLS")
-                        .get()
-                        .addOnSuccessListener { imageDocs ->
-                            val imageUrls = imageDocs.mapNotNull { it.getString("url") }
-                            val updatedDisc = disc.copy(imageUrls = imageUrls)
+        val userId = user.uid
 
-                            discs.add(updatedDisc)
-                            applyFilters()
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val favorites = document.get("favorites") as? List<String> ?: emptyList()
+
+                    if (favorites.isEmpty()) {
+                        Toast.makeText(this, "Избранное пусто", Toast.LENGTH_SHORT).show()
+                        return@addOnSuccessListener
+                    }
+
+                    db.collection("discs").whereIn("id", favorites).get()
+                        .addOnSuccessListener { documents ->
+                            favoriteDiscs.clear()
+                            for (document in documents) {
+                                val disc = document.toObject(GameDisc::class.java)
+                                val discId = document.id
+
+                                db.collection("discs").document(discId).collection("imageURLS")
+                                    .get()
+                                    .addOnSuccessListener { imageDocs ->
+                                        val imageUrls = imageDocs.mapNotNull { it.getString("url") }
+                                        val updatedDisc = disc.copy(imageUrls = imageUrls)
+
+                                        favoriteDiscs.add(updatedDisc)
+                                        applyFilters() // Обновляем фильтры после загрузки данных
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.e("FavoritesActivity", "Ошибка загрузки изображений", e)
+                                    }
+                            }
                         }
-                        .addOnFailureListener { e ->
-                            Log.e("MainActivity", "Ошибка загрузки изображений", e)
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "Ошибка загрузки избранных дисков: ${exception.message}", Toast.LENGTH_SHORT).show()
                         }
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Ошибка при загрузке данных: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ошибка загрузки данных: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -158,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         val selectedGenre = genreSpinner.selectedItem.toString()
         val selectedPrice = priceSpinner.selectedItem.toString()
 
-        filteredDiscs = discs.filter { disc ->
+        filteredDiscs = favoriteDiscs.filter { disc ->
             (query.isEmpty() || disc.name.lowercase().contains(query)) &&
                     (selectedGenre == "Все жанры" || disc.genre == selectedGenre)
         }.toMutableList()

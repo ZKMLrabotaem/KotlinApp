@@ -40,6 +40,10 @@ class ProfileActivity : AppCompatActivity() {
 
         val editButton: Button = findViewById(R.id.editButton)
         val logoutButton: Button = findViewById(R.id.logoutButton)
+        val favoritesButton: Button = findViewById(R.id.favsButton)
+        favoritesButton.setOnClickListener {
+            startActivity(Intent(this, FavoritesActivity::class.java))
+        }
 
         db.collection("users")
             .document(user.uid)
@@ -60,9 +64,9 @@ class ProfileActivity : AppCompatActivity() {
                     val dislikedGenres = userData?.get("dislikedGenres") as? List<String>
 
                     Glide.with(this).load(avatarUrl).into(avatarImageView)
-                    nameTextView.text = "Имя: $name"
+                    nameTextView.text = "$name"
                     genderTextView.text = "Пол: $gender"
-                    birthdateTextView.text = "Д.Р.: $birthdate"
+                    birthdateTextView.text = "Дата Рождения: $birthdate"
                     countryTextView.text = "Страна: $country"
                     emailTextView.text = "Email: $email"
                     phoneTextView.text = "Тел.: $phone"
